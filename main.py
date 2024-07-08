@@ -7,8 +7,7 @@ import time
 import os
 import threading
 import json
-import asyncio
-import websockets
+
 
 with open('config.json', 'r') as f: DATA = json.load(f)
 def getenv(var): return os.environ.get(var) or DATA.get(var, None)
@@ -23,24 +22,6 @@ if ss is not None:
 	acc = Client("myacc" ,api_id=api_id, api_hash=api_hash, session_string=ss)
 	acc.start()
 else: acc = None
-
-async def handle_client(websocket, path):
-    while True:
-        message = await websocket.recv()
-        print(f"Received message from client: {message}")
-
-        await websocket.send(f"Hello, {message}!")
-
-async def main():
-    async with websockets.serve(handle_client, "localhost", 10000):
-        await asyncio.Future()  # run forever
-
-# Run the server in a separate thread
-asyncio.run_coroutine_threadsafe(main(), asyncio.new_event_loop())
-
-# Run the main code
-# ...
-
 # download status
 def downstatus(statusfile,message):
 	while True:
